@@ -1,24 +1,20 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import "./style.css";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyChMH8UwkuT1sGWFU6hIFItPKH3StRBmLg",
+  authDomain: "simple-server-game.firebaseapp.com",
+  databaseURL: "https://simple-server-game-default-rtdb.firebaseio.com",
+  projectId: "simple-server-game",
+  storageBucket: "simple-server-game.appspot.com",
+  messagingSenderId: "664777792190",
+  appId: "1:664777792190:web:4492b2c92154d781a81cef",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
