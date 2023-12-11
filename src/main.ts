@@ -63,6 +63,11 @@ class basicClass {
 
     bossRef.on("value", (snapshot) => {
       bossData.health = snapshot.child("health").val();
+      if (bossData.health < 0) {
+        bossRef.set({
+          health: 1000,
+        });
+      }
     });
   }
 
