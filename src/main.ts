@@ -46,7 +46,7 @@ class basicClass {
     bossRef.update({
       health: bossData.health,
     });
-    console.log(bossData.health)
+    console.log(bossData.health);
   });
 
   function setBoss() {
@@ -59,6 +59,10 @@ class basicClass {
           health: 1000,
         });
       }
+    });
+
+    bossRef.on("value", (snapshot) => {
+      bossData.health = snapshot.child("health").val();
     });
   }
 
