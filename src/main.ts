@@ -35,11 +35,23 @@ class basicClass {
   let players = {};
 
   let bossRef: firebase.database.Reference;
+  let bossData = { health: 0 };
+
+  const playerActionButton = document.querySelector("#action1")!;
+
+  playerActionButton.addEventListener("click", () => {
+    bossData.health -= 100;
+    bossRef.update({
+      health: bossData.health,
+    });
+    console.log(bossData.health)
+  });
 
   function setBoss() {
     bossRef = firebase.database().ref(`boss`);
     get(bossRef.child("/health")).then((snapshot) => {
-      if (snapshot.val() <= 0) {
+      bossData.health = snapshot.val();
+      if (bossData.health <= 0) {
         console.log(snapshot.val());
         bossRef.set({
           health: 1000,
