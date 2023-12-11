@@ -22,17 +22,19 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 console.log("test");
 
+/*
 class basicClass {
   constructor(readonly maxHealth: number, readonly attack: number) {}
 }
+*/
 
 (function () {
   let thisPlayerId: string;
   let thisPlayerRef: firebase.database.Reference;
-  let players = {};
+  //let players = {};
 
   let bossRef: firebase.database.Reference;
   let bossData = { health: 0 };
@@ -60,6 +62,7 @@ class basicClass {
     });
   }
 
+  /*
   function initGame() {
     const allPlayersRef = firebase.database().ref(`players`);
 
@@ -75,6 +78,7 @@ class basicClass {
       const removedKey = snapshot.val().id;
     });
   }
+  */
 
   firebase.auth().onAuthStateChanged((user) => {
     console.log(user);
