@@ -9,7 +9,7 @@ import "./style.css";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/database";
-import { get, push, ref } from "firebase/database";
+import { get, push } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: "AIzaSyChMH8UwkuT1sGWFU6hIFItPKH3StRBmLg",
