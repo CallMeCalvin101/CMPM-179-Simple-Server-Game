@@ -47,38 +47,53 @@ function getRandomClass(): string {
 
   let playerAttacksRef: firebase.database.Reference;
 
-  function reduceBossCD(amount: number) {
-    bossData.cooldown -= amount;
+  function damageBoss(amount: number, cd: number = 1) {
+    bossData.health -= amount;
+    bossData.cooldown -= cd;
     bossRef.update({
       health: bossData.health,
       cooldown: bossData.cooldown,
     });
   }
 
+  function damagePlayer(amount: number) {
+    thisPlayerData.health -= amount;
+    window.dispatchEvent(UIChangedEvent);
+  }
+
+  function healPlayer(amount: number) {
+    thisPlayerData.health += amount;
+
+    if (thisPlayerData.health > thisPlayerClass.health) {
+      thisPlayerData.health = thisPlayerClass.health;
+    }
+
+    window.dispatchEvent(UIChangedEvent);
+  }
+
   const playerAttackButton = document.querySelector("#attack")!;
   playerAttackButton.addEventListener("click", () => {
-    bossData.health -= thisPlayerData.attack;
-    reduceBossCD(1);
+    damageBoss(thisPlayerData.attack);
   });
 
   const playerRecoverButton = document.querySelector("#recover")!;
   playerRecoverButton.addEventListener("click", () => {
     if (thisPlayerData.health < thisPlayerClass.health) {
       const recoveryAmount = Math.floor(thisPlayerClass.health / 10);
-      thisPlayerData.health += recoveryAmount;
+      healPlayer(recoveryAmount);
     }
 
-    if (thisPlayerData.health > thisPlayerClass.health) {
-      thisPlayerData.health = thisPlayerClass.health;
-    }
-
-    reduceBossCD(1);
-    dispatchEvent(UIChangedEvent);
+    damageBoss(0);
   });
 
   const playerSkill1Button = document.querySelector("#skill1")!;
   playerSkill1Button.addEventListener("click", () => {
-    pushPlayerAttack("attack", 10);
+    parseSkillData(thisPlayerClass.skill1());
+  });
+
+  const playerSkill2Button = document.querySelector("#skill2")!;
+  playerSkill2Button.addEventListener("click", () => {
+    parseSkillData(thisPlayerClass.skill2());
   });
 
   const UIChangedEvent: Event = new Event("ui-changed");
@@ -121,7 +136,7 @@ function getRandomClass(): string {
 
       bossData.cooldown = snapshot.child("cooldown").val();
       if (bossData.cooldown <= 0) {
-        thisPlayerData.health -= 10;
+        damagePlayer(10);
         bossRef.update({
           cooldown: 10,
         });
@@ -129,6 +144,33 @@ function getRandomClass(): string {
 
       window.dispatchEvent(UIChangedEvent);
     });
+  }
+
+  function resolveTargetAndEffects(
+    target: string,
+    effect: string,
+    value: number
+  ) {
+    if (target == "boss") {
+      if (effect == "damage") {
+        damageBoss(value);
+      } else if (effect == "heal") {
+        damageBoss(-1 * value);
+      }
+    } else if (target == "self") {
+      if (effect == "damage") {
+        damagePlayer(value);
+      } else if (effect == "heal") {
+        healPlayer(value);
+      }
+    } else if (target == "allies") {
+      pushPlayerAttack(effect, value);
+    }
+  }
+
+  function parseSkillData(data: classData.SkillData) {
+    resolveTargetAndEffects(data.target1, data.effect1, data.value1);
+    resolveTargetAndEffects(data.target2, data.effect2, data.value2);
   }
 
   function pushPlayerAttack(type: string, value: number) {
@@ -140,10 +182,13 @@ function getRandomClass(): string {
 
   function parseOtherPlayerAttack(data: [string, string, number]) {
     if (data[0] != thisPlayerId) {
-      if (data[1] == "attack") {
-        thisPlayerData.health -= data[2];
+      console.log(data);
+      if (data[1] == "damage") {
+        damagePlayer(data[2]);
       } else if (data[1] == "heal") {
-        thisPlayerData.health += data[2];
+        healPlayer(data[2]);
+      } else if (data[1] == "set") {
+        thisPlayerData.health = data[2];
       }
     }
   }
@@ -157,6 +202,7 @@ function getRandomClass(): string {
     const attackRef = firebase.database().ref(`playerAttacks/attacks`);
     attackRef.on("child_added", (snapshot) => {
       parseOtherPlayerAttack(snapshot.val());
+      console.log(thisPlayerData.health);
       snapshot.ref.remove();
       window.dispatchEvent(UIChangedEvent);
     });
