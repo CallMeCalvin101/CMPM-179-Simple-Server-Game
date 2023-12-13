@@ -47,18 +47,37 @@ function getRandomClass(): string {
 
   let playerAttacksRef: firebase.database.Reference;
 
-  const playerAction1Button = document.querySelector("#action1")!;
-  playerAction1Button.addEventListener("click", () => {
-    bossData.health -= thisPlayerData.attack;
-    bossData.cooldown -= 1;
+  function reduceBossCD(amount: number) {
+    bossData.cooldown -= amount;
     bossRef.update({
       health: bossData.health,
       cooldown: bossData.cooldown,
     });
+  }
+
+  const playerAttackButton = document.querySelector("#attack")!;
+  playerAttackButton.addEventListener("click", () => {
+    bossData.health -= thisPlayerData.attack;
+    reduceBossCD(1);
   });
 
-  const playerAction2Button = document.querySelector("#action2")!;
-  playerAction2Button.addEventListener("click", () => {
+  const playerRecoverButton = document.querySelector("#recover")!;
+  playerRecoverButton.addEventListener("click", () => {
+    if (thisPlayerData.health < thisPlayerClass.health) {
+      const recoveryAmount = Math.floor(thisPlayerClass.health / 10);
+      thisPlayerData.health += recoveryAmount;
+    }
+
+    if (thisPlayerData.health > thisPlayerClass.health) {
+      thisPlayerData.health = thisPlayerClass.health;
+    }
+
+    reduceBossCD(1);
+    dispatchEvent(UIChangedEvent);
+  });
+
+  const playerSkill1Button = document.querySelector("#skill1")!;
+  playerSkill1Button.addEventListener("click", () => {
     pushPlayerAttack("attack", 10);
   });
 
