@@ -71,9 +71,15 @@ function getRandomClass(): string {
     window.dispatchEvent(UIChangedEvent);
   }
 
+  const descriptionField = document.getElementById("description")!;
+
   const playerAttackButton = document.querySelector("#attack")!;
   playerAttackButton.addEventListener("click", () => {
     damageBoss(thisPlayerData.attack);
+  });
+
+  playerAttackButton.addEventListener("pointerover", () => {
+    descriptionField.innerHTML = `<strong>Description:</strong> Deals ${thisPlayerData.attack} to the boss`;
   });
 
   const playerRecoverButton = document.querySelector("#recover")!;
@@ -86,14 +92,26 @@ function getRandomClass(): string {
     damageBoss(0);
   });
 
+  playerRecoverButton.addEventListener("pointerover", () => {
+    descriptionField.innerHTML = `<strong>Description:</strong> Heal 10% of your max health`;
+  });
+
   const playerSkill1Button = document.querySelector("#skill1")!;
   playerSkill1Button.addEventListener("click", () => {
     parseSkillData(thisPlayerClass.skill1());
   });
 
+  playerSkill1Button.addEventListener("pointerover", () => {
+    descriptionField.innerHTML = `<strong>Description:</strong> ${thisPlayerClass.skill1Description}`;
+  });
+
   const playerSkill2Button = document.querySelector("#skill2")!;
   playerSkill2Button.addEventListener("click", () => {
     parseSkillData(thisPlayerClass.skill2());
+  });
+
+  playerSkill2Button.addEventListener("pointerover", () => {
+    descriptionField.innerHTML = `<strong>Description:</strong> ${thisPlayerClass.skill2Description}`;
   });
 
   const UIChangedEvent: Event = new Event("ui-changed");

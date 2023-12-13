@@ -12,6 +12,8 @@ export interface BaseClass {
   name: string;
   health: number;
   attack: number;
+  skill1Description: string;
+  skill2Description: string;
 
   skill1(): SkillData;
   skill2(): SkillData;
@@ -21,11 +23,16 @@ class Berserker implements BaseClass {
   name: string;
   health: number;
   attack: number;
+  skill1Description: string;
+  skill2Description: string;
 
   constructor() {
     this.name = "Berserker";
     this.health = 100;
     this.attack = 30;
+    this.skill1Description =
+      "Takes some damage to deal heavy damage to the boss";
+    this.skill2Description = "Damage all allies to massively damage the boss";
   }
 
   skill1(): SkillData {
@@ -57,11 +64,17 @@ class Gambler implements BaseClass {
   name: string;
   health: number;
   attack: number;
+  skill1Description: string;
+  skill2Description: string;
 
   constructor() {
     this.name = "Gambler";
     this.health = 125;
     this.attack = 20;
+    this.skill1Description =
+      "50% to hurt the boss and heal, 50% to take damage";
+    this.skill2Description =
+      "50% to massively damage the boss, 50% to hurt all allies";
   }
 
   skill1(): SkillData {
@@ -117,11 +130,15 @@ class Guardian implements BaseClass {
   name: string;
   health: number;
   attack: number;
+  skill1Description: string;
+  skill2Description: string;
 
   constructor() {
     this.name = "Guardian";
     this.health = 200;
     this.attack = 10;
+    this.skill1Description = "Use your own health to heal all other allies";
+    this.skill2Description = "Heavily damage the boss but take some damage";
   }
 
   skill1(): SkillData {
@@ -153,11 +170,15 @@ class Mage implements BaseClass {
   name: string;
   health: number;
   attack: number;
+  skill1Description: string;
+  skill2Description: string;
 
   constructor() {
     this.name = "Mage";
     this.health = 150;
     this.attack = 20;
+    this.skill1Description = "Use your own health to heavily damage the boss";
+    this.skill2Description = "Damage all of your allies to heal";
   }
 
   skill1(): SkillData {
@@ -189,11 +210,17 @@ class Judge implements BaseClass {
   name: string;
   health: number;
   attack: number;
+  skill1Description: string;
+  skill2Description: string;
 
   constructor() {
     this.name = "Judge";
     this.health = 175;
     this.attack = 20;
+    this.skill1Description =
+      "Take damage to set the health of all allies to 100";
+    this.skill2Description =
+      "Deals damage to all allies to do massive damage to the boss";
   }
 
   skill1(): SkillData {
@@ -204,7 +231,7 @@ class Judge implements BaseClass {
 
       target2: "allies",
       effect2: "set",
-      value2: 80,
+      value2: 100,
     };
   }
 
@@ -216,7 +243,7 @@ class Judge implements BaseClass {
 
       target2: "allies",
       effect2: "damage",
-      value2: 10,
+      value2: 25,
     };
   }
 }
@@ -225,11 +252,15 @@ class Cleric implements BaseClass {
   name: string;
   health: number;
   attack: number;
+  skill1Description: string;
+  skill2Description: string;
 
   constructor() {
     this.name = "Cleric";
     this.health = 150;
     this.attack = 10;
+    this.skill1Description = "Heals all allies and the boss";
+    this.skill2Description = "Use your own health to greatly heal your allies";
   }
 
   skill1(): SkillData {
@@ -240,7 +271,7 @@ class Cleric implements BaseClass {
 
       target2: "boss",
       effect2: "heal",
-      value2: 25,
+      value2: 200,
     };
   }
 
