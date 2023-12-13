@@ -1,4 +1,5 @@
 import "./style.css";
+import * as classData from "./classes";
 
 // Import the functions you need from the SDKs you need
 // import { initializeApp } from "firebase/app";
@@ -25,16 +26,20 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 console.log("test");
 
-/*
-class basicClass {
-  constructor(readonly maxHealth: number, readonly attack: number) {}
+function getRandomClass(): string {
+  const randClass = Math.floor(classData.classList.length * Math.random());
+  return classData.classList[randClass];
 }
-*/
 
 (function () {
   let thisPlayerId: string;
   let thisPlayerRef: firebase.database.Reference;
-  let thisPlayerData = { health: 0 };
+  let thisPlayerClass = classData.getClassFromString(getRandomClass());
+  let thisPlayerData = {
+    health: thisPlayerClass.health,
+    attack: thisPlayerClass.attack,
+  };
+  console.log(thisPlayerClass.name);
   //let players = {};
 
   let bossRef: firebase.database.Reference;
@@ -44,7 +49,7 @@ class basicClass {
 
   const playerAction1Button = document.querySelector("#action1")!;
   playerAction1Button.addEventListener("click", () => {
-    bossData.health -= 100;
+    bossData.health -= thisPlayerData.attack;
     bossData.cooldown -= 1;
     bossRef.update({
       health: bossData.health,
@@ -139,7 +144,6 @@ class basicClass {
   }
 
   function initGame() {
-    thisPlayerData.health = 100;
     setBoss();
     setPlayers();
   }
