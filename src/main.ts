@@ -237,14 +237,17 @@ function getRandomClass(): string {
   }
 
   function parseOtherPlayerAttack(data: [string, string, number]) {
+    const playerLog = document.getElementById("log")!;
     if (data[0] != thisPlayerId) {
-      console.log(data);
       if (data[1] == "damage") {
         damagePlayer(data[2]);
+        playerLog.innerHTML = `Took ${data[2]} damage from allies`;
       } else if (data[1] == "heal") {
         healPlayer(data[2]);
+        playerLog.innerHTML = `Healed ${data[2]} damage from allies`;
       } else if (data[1] == "set") {
         thisPlayerData.health = data[2];
+        playerLog.innerHTML = `Set health to ${data[2]} from allies`;
       }
     }
   }
