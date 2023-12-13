@@ -7,13 +7,17 @@
   </head>
   <body>
     <div id="app">
+      <img src="/dragon.png" />
       <p id="boss">Boss Health</p>
-      <p id="player">Player Health</p>
+      <progress id="bossProgress" max="10000" value="10000"></progress>
+      <br />
+      <p id="playerClass"></p>
+      <p id="playerHealth"></p>
       <button id="attack">Attack</button>
       <button id="recover">Recover</button>
       <button id="skill1">Skill 1</button>
       <button id="skill2">Skill 2</button>
-      <p id="description">Description of Actions</p>
+      <p id="description"></p>
     </div>
     <script type="module" src="/src/main.ts"></script>
   </body>

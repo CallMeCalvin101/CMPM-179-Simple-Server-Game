@@ -40,7 +40,6 @@ function getRandomClass(): string {
     attack: thisPlayerClass.attack,
   };
   console.log(thisPlayerClass.name);
-  //let players = {};
 
   let bossRef: firebase.database.Reference;
   let bossData = { health: 0, cooldown: 0 };
@@ -71,20 +70,28 @@ function getRandomClass(): string {
     window.dispatchEvent(UIChangedEvent);
   }
 
+  function isPlayerAlive(): boolean {
+    return thisPlayerData.health > 0;
+  }
+
   const descriptionField = document.getElementById("description")!;
 
   const playerAttackButton = document.querySelector("#attack")!;
   playerAttackButton.addEventListener("click", () => {
-    damageBoss(thisPlayerData.attack);
+    if (isPlayerAlive()) {
+      damageBoss(thisPlayerData.attack);
+    }
   });
 
   playerAttackButton.addEventListener("pointerover", () => {
-    descriptionField.innerHTML = `<strong>Description:</strong> Deals ${thisPlayerData.attack} to the boss`;
+    if (isPlayerAlive()) {
+      descriptionField.innerHTML = `<strong>Description:</strong> Deals ${thisPlayerData.attack} to the boss`;
+    }
   });
 
   const playerRecoverButton = document.querySelector("#recover")!;
   playerRecoverButton.addEventListener("click", () => {
-    if (thisPlayerData.health < thisPlayerClass.health) {
+    if (thisPlayerData.health < thisPlayerClass.health && isPlayerAlive()) {
       const recoveryAmount = Math.floor(thisPlayerClass.health / 10);
       healPlayer(recoveryAmount);
     }
@@ -93,25 +100,35 @@ function getRandomClass(): string {
   });
 
   playerRecoverButton.addEventListener("pointerover", () => {
-    descriptionField.innerHTML = `<strong>Description:</strong> Heal 10% of your max health`;
+    if (isPlayerAlive()) {
+      descriptionField.innerHTML = `<strong>Description:</strong> Heal 10% of your max health`;
+    }
   });
 
   const playerSkill1Button = document.querySelector("#skill1")!;
   playerSkill1Button.addEventListener("click", () => {
-    parseSkillData(thisPlayerClass.skill1());
+    if (isPlayerAlive()) {
+      parseSkillData(thisPlayerClass.skill1());
+    }
   });
 
   playerSkill1Button.addEventListener("pointerover", () => {
-    descriptionField.innerHTML = `<strong>Description:</strong> ${thisPlayerClass.skill1Description}`;
+    if (isPlayerAlive()) {
+      descriptionField.innerHTML = `<strong>Description:</strong> ${thisPlayerClass.skill1Description}`;
+    }
   });
 
   const playerSkill2Button = document.querySelector("#skill2")!;
   playerSkill2Button.addEventListener("click", () => {
-    parseSkillData(thisPlayerClass.skill2());
+    if (isPlayerAlive()) {
+      parseSkillData(thisPlayerClass.skill2());
+    }
   });
 
   playerSkill2Button.addEventListener("pointerover", () => {
-    descriptionField.innerHTML = `<strong>Description:</strong> ${thisPlayerClass.skill2Description}`;
+    if (isPlayerAlive()) {
+      descriptionField.innerHTML = `<strong>Description:</strong> ${thisPlayerClass.skill2Description}`;
+    }
   });
 
   const UIChangedEvent: Event = new Event("ui-changed");
@@ -122,13 +139,34 @@ function getRandomClass(): string {
   });
 
   function updatePlayerUI() {
-    const playerUI = document.getElementById("player")!;
-    playerUI.innerHTML = `<strong>Your Health:</strong> ${thisPlayerData.health}`;
+    const playerClass = document.getElementById("playerClass")!;
+    playerClass.innerHTML = `<strong>${thisPlayerClass.name}</strong>`;
+
+    const playerHealth = document.getElementById("playerHealth")!;
+    playerHealth.innerHTML = `<strong>Your Health:</strong> <cite id="healthColor">${thisPlayerData.health}</cite>`;
+
+    const playerHealthValue = document.getElementById("healthColor")!;
+    if (thisPlayerData.health > thisPlayerClass.health / 2) {
+      playerHealthValue.style.color = "green";
+    } else if (thisPlayerData.health > thisPlayerClass.health / 4) {
+      playerHealthValue.style.color = "yellow";
+    } else {
+      playerHealthValue.style.color = "red";
+    }
+
+    if (!isPlayerAlive()) {
+      descriptionField.innerHTML = `<strong>You have died 💀, refresh to start a new life</strong>`;
+    }
   }
 
   function updateBossUI() {
     const bossUI = document.getElementById("boss")!;
     bossUI.innerHTML = `<strong>Boss Health:</strong> ${bossData.health}`;
+
+    const bossHealthBar = document.getElementById(
+      "bossProgress"
+    )! as HTMLProgressElement;
+    bossHealthBar.value = bossData.health;
   }
 
   function setBoss() {
@@ -138,7 +176,7 @@ function getRandomClass(): string {
       bossData.health = snapshot.val();
       if (bossData.health <= 0) {
         bossRef.set({
-          health: 1000,
+          health: 10000,
           cooldown: 10,
         });
       }
@@ -148,7 +186,7 @@ function getRandomClass(): string {
       bossData.health = snapshot.child("health").val();
       if (bossData.health < 0) {
         bossRef.update({
-          health: 1000,
+          health: 10000,
         });
       }
 

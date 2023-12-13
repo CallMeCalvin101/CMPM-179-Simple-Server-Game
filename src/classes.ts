@@ -27,7 +27,7 @@ class Berserker implements BaseClass {
   skill2Description: string;
 
   constructor() {
-    this.name = "Berserker";
+    this.name = "Berserker ⚔️";
     this.health = 100;
     this.attack = 30;
     this.skill1Description =
@@ -68,7 +68,7 @@ class Gambler implements BaseClass {
   skill2Description: string;
 
   constructor() {
-    this.name = "Gambler";
+    this.name = "Gambler 🎲";
     this.health = 125;
     this.attack = 20;
     this.skill1Description =
@@ -134,7 +134,7 @@ class Guardian implements BaseClass {
   skill2Description: string;
 
   constructor() {
-    this.name = "Guardian";
+    this.name = "Guardian 🎲";
     this.health = 200;
     this.attack = 10;
     this.skill1Description = "Use your own health to heal all other allies";
@@ -174,7 +174,7 @@ class Mage implements BaseClass {
   skill2Description: string;
 
   constructor() {
-    this.name = "Mage";
+    this.name = "Mage 🩸";
     this.health = 150;
     this.attack = 20;
     this.skill1Description = "Use your own health to heavily damage the boss";
@@ -214,7 +214,7 @@ class Judge implements BaseClass {
   skill2Description: string;
 
   constructor() {
-    this.name = "Judge";
+    this.name = "Judge ⚖️";
     this.health = 175;
     this.attack = 20;
     this.skill1Description =
@@ -256,7 +256,7 @@ class Cleric implements BaseClass {
   skill2Description: string;
 
   constructor() {
-    this.name = "Cleric";
+    this.name = "Cleric 🌿";
     this.health = 150;
     this.attack = 10;
     this.skill1Description = "Heals all allies and the boss";
